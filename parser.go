@@ -57,6 +57,7 @@ func newScanner(src io.Reader) *scanner.Scanner {
 	s.Init(src)
 	s.Whitespace ^= 1<<'\t' | 1<<' '            // do not skip tabs and spaces
 	s.Error = func(*scanner.Scanner, string) {} // do not print errors to stderr
+	s.Mode ^= scanner.SkipComments              // do not skip '//'-style comments
 	s.IsIdentRune = func(ch rune, i int) bool {
 		return ch == '_' || ch == '-' || unicode.IsLetter(ch) || unicode.IsDigit(ch) && i > 0
 	}

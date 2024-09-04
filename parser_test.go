@@ -236,6 +236,22 @@ func TestExtractObject(t *testing.T) {
 		assertDeepEqual(t, got, expected)
 	})
 
+	t.Run("parse both comments styles", func(t *testing.T) {
+		parser := newParser(strings.NewReader(
+			`# hash comment
+			a:1
+			// slashslash comment
+			b:2
+			# // both at once
+			c:3
+		`))
+		parser.advance()
+		expected := Object{"a": Int(1), "b": Int(2), "c": Int(3)}
+		got, err := parser.extractObject()
+		assertNoError(t, err)
+		assertDeepEqual(t, got, expected)
+	})
+
 	t.Run("parse correctly if the last line is a comment", func(t *testing.T) {
 		config := `{
 			a: 1
